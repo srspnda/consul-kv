@@ -66,7 +66,7 @@ func (g *GetCommand) Run(args []string) int {
 		return 1
 	}
 
-	fmt.Printf("KV: %s", pair)
+	fmt.Printf("KV: %v", pair)
 
 	return 0
 }
