@@ -24,7 +24,12 @@ func (g *GetCommand) Run(args []string) int {
 	flagSet := flag.NewFlagSet("get", flag.ContinueOnError)
 
 	flagSet.Usage = func() { g.Ui.Output(g.Help()) }
-	flagSet.StringVar(&addr, "http-addr", "127.0.0.1:8500", "http addr of the agent")
+	flagSet.StringVar(
+		&addr,
+		"http-addr",
+		"127.0.0.1:8500",
+		"http addr of the agent",
+	)
 	flagSet.StringVar(&dc, "datacenter", "", "datacenter of the agent")
 	flagSet.StringVar(&key, "key", "", "key of the kv pair")
 
@@ -55,14 +60,14 @@ func (g *GetCommand) Run(args []string) int {
 
 	client, err := consulapi.NewClient(config)
 	if err != nil {
-		g.Ui.Error(fmt.Sprintf("error on client addr=%s dc=%s: %s\n", addr, dc, err))
+		g.Ui.Error(fmt.Sprintf("%s", err))
 		return 1
 	}
 	kv := client.KV()
 
 	pair, _, err := kv.Get(key, nil)
 	if err != nil {
-		g.Ui.Error(fmt.Sprintf("error on GET key=%s: %s\n", key, err))
+		g.Ui.Error(fmt.Sprintf("%s", err))
 		return 1
 	}
 

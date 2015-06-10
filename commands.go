@@ -19,8 +19,8 @@ func init() {
 				Ui: ui,
 			}, nil
 		},
-		"set": func() (cli.Command, error) {
-			return &command.SetCommand{
+		"put": func() (cli.Command, error) {
+			return &command.PutCommand{
 				Ui: ui,
 			}, nil
 		},
