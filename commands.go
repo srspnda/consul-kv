@@ -19,6 +19,11 @@ func init() {
 				Ui: ui,
 			}, nil
 		},
+		"set": func() (cli.Command, error) {
+			return &command.SetCommand{
+				Ui: ui,
+			}, nil
+		},
 		"version": func() (cli.Command, error) {
 			return &command.VersionCommand{
 				Version: Version,
