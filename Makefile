@@ -1,14 +1,27 @@
-VERSION=0.1.0
+NAME = $(shell $(basename "$(pwd)"))
+VERSION = $(shell grep -oE "[0-9]\.[0-9]\.[0-9]" main.go)
+DEPS = $(shell go list -f '{{range .TestImports}}{{.}} {{end}}' ./...)
 
-all: build
+GOXOS = "linux darwin windows"
+GOXOUT = "build/{{.Dir}}_$(VERSION)_{{.OS}}_{{.Arch}}/$(NAME)"
 
-build:
+all: deps build
+
+deps:
+	go get -d -v ./...
+	echo $(DEPS) | xargs -n1 go get -d
+
+build: deps
 	@mkdir -p bin/
-	go build -o bin/consul-kv
-	cp bin/consul-kv ${GOPATH}/bin
+	go build -o bin/$(NAME)
 
-release:
-	@mkdir -p bin/
-	gox -os="linux windows darwin" -output="bin/{{.Dir}}_${VERSION}_{{.OS}}_{{.Arch}}"
+test:
+	go test ./...
+	go vet ./...
 
-.PHONY: all build release
+gox: build test
+	rm -rf build
+	@mkdir -p build
+	gox -os=$(GOXOS) -output=$(GOXOUT)
+
+.PHONY: all deps build test gox

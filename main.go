@@ -9,6 +9,9 @@ import (
 	"github.com/mitchellh/cli"
 )
 
+const Version = "0.1.0"
+const Name = "consul-kv"
+
 func main() {
 	os.Exit(realMain())
 }
