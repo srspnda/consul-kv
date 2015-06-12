@@ -71,7 +71,7 @@ func (p *PutCommand) Run(args []string) int {
 		return 1
 	}
 
-	fmt.Printf("PUT: key=%s value=%s\n", key, value)
+	p.Ui.Output(fmt.Sprintf("PUT: key=%s value=%s\n", key, value))
 
 	return 0
 }

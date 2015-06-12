@@ -24,6 +24,11 @@ func init() {
 				Ui: ui,
 			}, nil
 		},
+		"ls": func() (cli.Command, error) {
+			return &command.LsCommand{
+				Ui: ui,
+			}, nil
+		},
 		"version": func() (cli.Command, error) {
 			return &command.VersionCommand{
 				Version: Version,

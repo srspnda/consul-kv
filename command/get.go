@@ -58,12 +58,12 @@ func (g *GetCommand) Run(args []string) int {
 		config.Datacenter = dc
 	}
 
-	client, err := consulapi.NewClient(config)
+	c, err := consulapi.NewClient(config)
 	if err != nil {
 		g.Ui.Error(fmt.Sprintf("%s", err))
 		return 1
 	}
-	kv := client.KV()
+	kv := c.KV()
 
 	pair, _, err := kv.Get(key, nil)
 	if err != nil {
@@ -71,7 +71,7 @@ func (g *GetCommand) Run(args []string) int {
 		return 1
 	}
 
-	fmt.Printf("GET: key=%s value=%s\n", key, pair.Value)
+	g.Ui.Output(fmt.Sprintf("GET: key=%s value=%s\n", key, pair.Value))
 
 	return 0
 }
