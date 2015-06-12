@@ -33,12 +33,12 @@ func (l *LsCommand) Run(args []string) int {
 	if err := flagSet.Parse(args); err != nil {
 		return 0
 	}
-	if key == "" {
-		l.Ui.Error(fmt.Sprintf("-key required"))
-		l.Ui.Error("")
-		l.Ui.Error(l.Help())
-		return 1
-	}
+	//	if key == "" {
+	//		l.Ui.Error(fmt.Sprintf("-key required"))
+	//		l.Ui.Error("")
+	//		l.Ui.Error(l.Help())
+	//		return 1
+	//	}
 	config := &consulapi.Config{
 		Address:    "127.0.0.1:8500",
 		Scheme:     "http",
@@ -52,14 +52,14 @@ func (l *LsCommand) Run(args []string) int {
 	}
 	client, err := consulapi.NewClient(config)
 	if err != nil {
-		l.Ui.Error(fmt.Sprintf("%s", err))
+		l.Ui.Error(fmt.Sprintf("LS: client error %s", err))
 		return 1
 	}
 	kv := client.KV()
 
 	entries, _, err := kv.List(key, nil)
 	if err != nil {
-		l.Ui.Error(fmt.Sprintf("%s", err))
+		l.Ui.Error(fmt.Sprintf("LS: list error %s", err))
 		return 1
 	}
 
@@ -84,7 +84,7 @@ Options:
 
   -http-addr="127.0.0.1:8500"  HTTP address of the Consul agent.
   -datacenter=""               Datacenter of the Consul agent.
-  -key=""                      Key path to list all subkeys on the Consul agent.
+  -key="/"                     Path where to list all keys under given key.
 `)
 }
 

@@ -38,7 +38,7 @@ func (g *GetCommand) Run(args []string) int {
 	}
 
 	if key == "" {
-		g.Ui.Error(fmt.Sprintf("-key required"))
+		g.Ui.Error(fmt.Sprintf("GET: -key required"))
 		g.Ui.Error("")
 		g.Ui.Error(g.Help())
 		return 1
@@ -58,21 +58,29 @@ func (g *GetCommand) Run(args []string) int {
 		config.Datacenter = dc
 	}
 
-	c, err := consulapi.NewClient(config)
+	client, err := consulapi.NewClient(config)
 	if err != nil {
-		g.Ui.Error(fmt.Sprintf("%s", err))
+		g.Ui.Error(fmt.Sprintf("GET: client error %s", err))
 		return 1
 	}
-	kv := c.KV()
+	kv := client.KV()
 
 	pair, _, err := kv.Get(key, nil)
 	if err != nil {
-		g.Ui.Error(fmt.Sprintf("%s", err))
+		g.Ui.Error(fmt.Sprintf("GET: get error %s", err))
+		return 1
+	}
+	if pair == nil {
+		g.Ui.Error(fmt.Sprintf("GET: get error key=%s does not exist", key))
 		return 1
 	}
 
-	g.Ui.Output(fmt.Sprintf("GET: key=%s value=%s\n", key, pair.Value))
+	if pair.Value != nil {
+		g.Ui.Output(fmt.Sprintf("GET: key=%s value=%s", key, pair.Value))
+		return 0
+	}
 
+	g.Ui.Output(fmt.Sprintf("GET: key=%s value=<nil>", key))
 	return 0
 }
 

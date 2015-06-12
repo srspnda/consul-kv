@@ -38,7 +38,7 @@ func (p *PutCommand) Run(args []string) int {
 	}
 
 	if key == "" || value == "" {
-		p.Ui.Error(fmt.Sprintf("-key and -value required"))
+		p.Ui.Error(fmt.Sprintf("PUT: -key and -value required"))
 		p.Ui.Error("")
 		p.Ui.Error(p.Help())
 		return 1
@@ -60,18 +60,18 @@ func (p *PutCommand) Run(args []string) int {
 
 	client, err := consulapi.NewClient(config)
 	if err != nil {
-		p.Ui.Error(fmt.Sprintf("%s", err))
+		p.Ui.Error(fmt.Sprintf("PUT: client error %s", err))
 		return 1
 	}
 	kv := client.KV()
 
 	pair := &consulapi.KVPair{Key: key, Value: []byte(value)}
 	if _, err := kv.Put(pair, nil); err != nil {
-		p.Ui.Error(fmt.Sprintf("%s", err))
+		p.Ui.Error(fmt.Sprintf("PUT: key error %s", err))
 		return 1
 	}
 
-	p.Ui.Output(fmt.Sprintf("PUT: key=%s value=%s\n", key, value))
+	p.Ui.Output(fmt.Sprintf("PUT: key=%s value=%s", key, value))
 
 	return 0
 }
