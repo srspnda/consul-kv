@@ -1,4 +1,4 @@
-USER = "$(USER)"
+USER = "srspnda"
 NAME = $(shell awk -F\" '/^const Name/ { print $$2 }' main.go)
 VERSION = $(shell grep -oE "[0-9]\.[0-9]\.[0-9]" main.go)
 DEPS = $(shell go list -f '{{range .TestImports}}{{.}} {{end}}' ./...)
